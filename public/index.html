@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtenciónTotal | Gestión de Contactos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #10b981;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 0.5rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            font-size: 0.9rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .contact-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid #334155;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.3);
+        }
+
+        .contact-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .contact-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        .btn-edit:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-add:hover {
+            background: var(--primary-hover);
+            transform: scale(1.02);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal simple */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 450px;
+            border: 1px solid #334155;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: white;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div>
+                <h1>AtenciónTotal</h1>
+                <p style="color: var(--text-muted)">Sistema de Gestión de Contactos</p>
+            </div>
+            <div class="stats">
+                <div class="stat-card" id="count-label">Cargando...</div>
+            </div>
+        </header>
+
+        <button class="btn-add" onclick="openModal()">+ Nuevo Contacto</button>
+
+        <div id="contact-grid" class="grid">
+            <!-- Los contactos se cargarán aquí -->
+        </div>
+    </div>
+
+    <!-- Modal para Agregar/Editar -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle" style="margin-bottom: 1.5rem">Nuevo Contacto</h2>
+            <input type="text" id="name" placeholder="Nombre completo">
+            <input type="email" id="email" placeholder="Correo electrónico">
+            <input type="text" id="phone" placeholder="Teléfono">
+            <div style="display: flex; gap: 1rem; margin-top: 1rem">
+                <button class="btn-add" style="margin:0; width: 100%" onclick="saveContact()">Guardar</button>
+                <button class="btn-delete" style="padding: 0.75rem 2rem; width: 100%" onclick="closeModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api/contacts';
+        let currentEditId = null;
+
+        async function fetchContacts() {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            renderContacts(data);
+            document.getElementById('count-label').innerText = `${data.length} Contactos`;
+        }
+
+        function renderContacts(contacts) {
+            const grid = document.getElementById('contact-grid');
+            grid.innerHTML = '';
+            
+            contacts.forEach(c => {
+                const card = document.createElement('div');
+                card.className = 'contact-card';
+                card.innerHTML = `
+                    <h3>${c.nombre}</h3>
+                    <p>📧 ${c.email}</p>
+                    <p>📞 ${c.telefono}</p>
+                    <div class="actions">
+                        <button class="btn-edit" onclick="editContact('${c._id}', '${c.nombre}', '${c.email}', '${c.telefono}')">Editar</button>
+                        <button class="btn-delete" onclick="deleteContact('${c._id}')">Eliminar</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        async function deleteContact(id) {
+            if (confirm('¿Estás seguro de eliminar este contacto?')) {
+                await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                fetchContacts();
+            }
+        }
+
+        function openModal(edit = false) {
+            document.getElementById('contactModal').style.display = 'flex';
+            if (!edit) {
+                currentEditId = null;
+                document.getElementById('modalTitle').innerText = 'Nuevo Contacto';
+                document.getElementById('name').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('phone').value = '';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        function editContact(id, name, email, phone) {
+            currentEditId = id;
+            document.getElementById('modalTitle').innerText = 'Editar Contacto';
+            document.getElementById('name').value = name;
+            document.getElementById('email').value = email;
+            document.getElementById('phone').value = phone;
+            openModal(true);
+        }
+
+        async function saveContact() {
+            const contact = {
+                nombre: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('phone').value
+            };
+
+            const method = currentEditId ? 'PUT' : 'POST';
+            const url = currentEditId ? `${API_URL}/${currentEditId}` : API_URL;
+
+            await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(contact)
+            });
+
+            closeModal();
+            fetchContacts();
+        }
+
+        // Cargar al inicio
+        fetchContacts();
+    </script>
+</body>
+</html>

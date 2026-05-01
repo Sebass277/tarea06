@@ -1,0 +1,17 @@
+--- MEMORIA DE CONTEXTO PARA ANTIGRAVITY ---
+PROYECTO: Gestión de Contactos - AtenciónTotal
+UBICACIÓN: c:\Users\Lenovo\Desktop\Proyecto Docker\gestion-contactos
+ESTADO: Dockerizado (API Node.js v20 + MongoDB)
+
+INSTRUCCIONES RÁPIDAS:
+1. "Prendelo": Ejecutaré 'docker-compose start' en la ubicación del proyecto.
+2. "Apagalo": Ejecutaré 'docker-compose stop' en la ubicación del proyecto.
+3. "Reinicia": Ejecutaré 'docker-compose restart'.
+
+DETALLES TÉCNICOS:
+- Puerto API: 3000
+- Puerto Mongo: 27017
+- Interfaz Web: http://localhost:3000
+- Contenedores: gestion-contactos-app-1, gestion-contactos-mongo-1
+-------------------------------------------
+Lee este archivo y estaré listo para actuar sin preguntas.
